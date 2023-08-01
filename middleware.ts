@@ -11,22 +11,24 @@ const verifyJWT = async (jwt: string) => {
   return payload
 }
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const jwt = request.cookies.get('__cookie_custom_name')
 
   if (!jwt) {
-    return NextResponse.rewrite(new URL('/signin', request.url))
-  }
-
-  try {
-    await verifyJWT(jwt.value)
-    if (request.nextUrl.pathname === '/') {
-      return NextResponse.redirect(new URL('/home', request.url))
-    }
-    return NextResponse.next()
-  } catch (e) {
     return NextResponse.redirect(new URL('/signin', request.url))
   }
+
+  verifyJWT(jwt.value).then(
+    () => {
+      if (request.nextUrl.pathname === '/') {
+        return NextResponse.redirect(new URL('/home', request.url))
+      }
+      //return NextResponse.redirect(new URL('/home', request.url))
+    },
+    err => {
+      return NextResponse.redirect('/error')
+    },
+  )
 }
 
 export const config = {
