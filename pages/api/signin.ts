@@ -47,8 +47,9 @@ export default async function signin(
           maxAge: 60 * 60 * 24 * 7,
         }),
       )
-      res.status(201)
+      res.status(200)
       res.json({})
+      return
     } else {
       res.status(401)
       res.json({error: 'Invalid login credentials'})
