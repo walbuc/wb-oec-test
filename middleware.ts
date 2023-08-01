@@ -14,15 +14,12 @@ const PUBLIC_FILE = /\.(.*)$/
 // }
 
 export default async function middleware(req: NextRequest) {
-  const {pathname} = req.nextUrl
-
   if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/static') ||
-    pathname.startsWith('/signin') ||
-    pathname.startsWith('/register') ||
-    PUBLIC_FILE.test(pathname)
+    req.nextUrl.pathname.startsWith('/_next') ||
+    req.nextUrl.pathname.startsWith('/api') ||
+    req.nextUrl.pathname.startsWith('/static') ||
+    req.nextUrl.pathname.startsWith('/signin') ||
+    req.nextUrl.pathname.startsWith('/register')
   ) {
     return NextResponse.next()
   }
@@ -33,7 +30,7 @@ export default async function middleware(req: NextRequest) {
   }
   try {
     // await verifyJWT(jwt.value)
-    if (pathname === '/') {
+    if (req.nextUrl.pathname === '/') {
       return NextResponse.redirect(new URL('/home', req.url))
     }
     // if (pathname === '/signin' || pathname === '/register') {
