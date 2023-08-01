@@ -3,7 +3,7 @@ import {SignJWT, jwtVerify} from 'jose'
 import {db} from './db'
 import type {User} from '@prisma/client'
 import {ReadonlyRequestCookies} from 'next/dist/server/web/spec-extension/adapters/request-cookies'
-
+import {redirect} from 'next/navigation'
 // Sign it
 export const createJWT = (user: User) => {
   const iat = Math.floor(Date.now() / 1000)
@@ -19,27 +19,35 @@ export const createJWT = (user: User) => {
 
 // Validate a JWT:
 export const validateJWT = async (jwt: string) => {
-  const {payload} = await jwtVerify(
-    jwt,
-    new TextEncoder().encode(process.env.JWT_SECRET),
-  )
+  try {
+    const {payload} = await jwtVerify(
+      jwt,
+      new TextEncoder().encode(process.env.JWT_SECRET),
+    )
 
-  return payload.payload as any
+    return payload.payload as any
+  } catch (error) {
+    redirect('/signin')
+  }
 }
 
 // Getting the JWT from cookies:
 export const getUserFromCookie = async (cookies: ReadonlyRequestCookies) => {
   const jwt = cookies.get(process.env.COOKIE_NAME!)
   // by the time here we will  have a jwt token. no nee to validate
-  const {id} = await validateJWT(jwt!.value)
+  if (!jwt) {
+    redirect('/signin')
+  } else {
+    const {id} = await validateJWT(jwt!.value)
 
-  const user = await db.user.findUnique({
-    where: {
-      id: id,
-    },
-  })
+    const user = await db.user.findUnique({
+      where: {
+        id: id,
+      },
+    })
 
-  return user
+    return user
+  }
 }
 
 const hashPassword = (password: string) => bcrypt.hash(password, 10)

@@ -3,7 +3,7 @@ import {cookies} from 'next/headers'
 import {delay} from '@/lib/async'
 
 async function getData() {
-  //await delay(4000)
+  await delay(4000)
   const user = await getUserFromCookie(cookies())
   return user
 }
