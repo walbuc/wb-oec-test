@@ -1,17 +1,17 @@
 import {NextResponse} from 'next/server'
 import type {NextRequest} from 'next/server'
-import {jwtVerify} from 'jose'
+//import {jwtVerify} from 'jose'
 
 const PUBLIC_FILE = /\.(.*)$/
 
-const verifyJWT = async (jwt: string) => {
-  const {payload} = await jwtVerify(
-    jwt,
-    new TextEncoder().encode('somesecretevaluejwt'),
-  )
+// const verifyJWT = async (jwt: string) => {
+//   const {payload} = await jwtVerify(
+//     jwt,
+//     new TextEncoder().encode('somesecretevaluejwt'),
+//   )
 
-  return payload
-}
+//   return payload
+// }
 
 export default async function middleware(req: NextRequest) {
   const {pathname} = req.nextUrl
@@ -32,7 +32,7 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/signin', req.url))
   }
   try {
-    await verifyJWT(jwt.value)
+    // await verifyJWT(jwt.value)
     if (pathname === '/') {
       return NextResponse.redirect(new URL('/home', req.url))
     }
