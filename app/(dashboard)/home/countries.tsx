@@ -3,7 +3,7 @@ import CountrySearchCombobox from '@/components/country-combobox'
 import {delay} from '@/lib/async'
 
 export default async function Countries() {
-  //await delay(2000)
+  await delay(2000)
   const items = await getCountries()
 
   return (
