@@ -23,7 +23,15 @@ export function middleware(request: NextRequest) {
       if (request.nextUrl.pathname === '/') {
         return NextResponse.redirect(new URL('/home', request.url))
       }
-      //return NextResponse.redirect(new URL('/home', request.url))
+      const requestHeaders = new Headers(request.headers)
+      const response = NextResponse.next({
+        request: {
+          // New request headers
+          headers: requestHeaders,
+        },
+      })
+
+      return response
     },
     err => {
       return NextResponse.redirect('/error')
