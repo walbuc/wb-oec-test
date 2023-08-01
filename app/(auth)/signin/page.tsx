@@ -49,22 +49,23 @@ function getFieldsErrors(error?: FormErrors): {
 }
 
 export default function InlineLogin() {
-  const {error, run, status, reset} = useAsync()
+  //const {error, run, status, reset} = useAsync()
   const router = useRouter()
-  const fields = getFieldsErrors(error)
-  const formError = getFormError(error)
+  //const fields = getFieldsErrors(error)
+  //const formError = getFormError(error)
 
-  useEffect(() => {
-    if (status === 'success') {
-      router.push('/home')
-    }
-  }, [status, router])
+  // useEffect(() => {
+  //   if (status === 'success') {
+  //     router.push('/home')
+  //   }
+  // }, [status, router])
 
   async function handleSubmit(event: React.FormEvent<CustomForm>) {
     event.preventDefault()
     const email = event.currentTarget.email.value
     const password = event.currentTarget.password.value
-    run(signin({email, password}))
+    await signin({email, password})
+    router.push('/home')
   }
 
   return (
@@ -76,7 +77,7 @@ export default function InlineLogin() {
             name: 'email',
             autoComplete: 'email',
           }}
-          errors={fields.email}
+          //errors={fields.email}
         />
 
         <Field
@@ -86,25 +87,26 @@ export default function InlineLogin() {
             autoComplete: 'password',
             type: 'password',
           }}
-          errors={fields.password}
+          //errors={fields.password}
         />
-        {formError && formError}
+        {/* {formError && formError} */}
         <div className="flex flex-col items-center justify-between gap-6 pt-3">
           <Button
             className="w-full"
             size="md"
             variant="primary"
-            status={status === 'pending' ? 'pending' : status ?? 'idle'}
+            //status="idle"
+            //status={status === 'pending' ? 'pending' : status ?? 'idle'}
             type="submit"
-            disabled={status !== 'idle'}
+            //disabled={status !== 'idle'}
           >
             Log in
           </Button>
-          {error && (
+          {/* {error && (
             <Button variant="secondary" size="md" onClick={reset}>
               Reset
             </Button>
-          )}
+          )} */}
         </div>
       </form>
       <div className="flex items-center justify-center gap-2 pt-6">
