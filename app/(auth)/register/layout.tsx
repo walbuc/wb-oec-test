@@ -4,7 +4,7 @@ import {Spacer} from '@/components/spacer'
 
 export default function RegisterLayout({children}: PropsWithChildren) {
   return (
-    <div className="flex min-h-full flex-col justify-center pb-32 pt-20">
+    <div className="flex flex-grow flex-col justify-center pb-32 pt-20">
       <div className="mx-auto w-full max-w-md">
         <div className="flex flex-col gap-3 text-center">
           <h1 className="text-h1">Let&apos;s start your journey!</h1>
